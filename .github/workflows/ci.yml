@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Compile Python files
+        run: python -m py_compile app.py data_generator.py build_database.py
+      - name: Generate data
+        run: python data_generator.py
+      - name: Build SQLite database
+        run: python build_database.py
+      - name: Validate outputs
+        run: |
+          python - <<'PY'
+          import sqlite3
+          import pandas as pd
+          c = pd.read_csv("customers.csv")
+          t = pd.read_csv("transactions.csv")
+          assert len(c) == 2500
+          assert len(t) == 40000
+          assert c["customer_id"].is_unique
+          assert t["transaction_id"].is_unique
+          con = sqlite3.connect("credit_card_analytics.db")
+          n = con.execute("select count(*) from transactions").fetchone()[0]
+          con.close()
+          assert n == 40000
+          print("Smoke test passed.")
+          PY
