@@ -1,0 +1,70 @@
+-- POWER BI DAX MEASURES
+
+Total Spend =
+SUM(Transactions[transaction_amount])
+
+Total Transactions =
+COUNTROWS(Transactions)
+
+Total Customers =
+DISTINCTCOUNT(Customers[customer_id])
+
+Average Transaction Value =
+DIVIDE([Total Spend], [Total Transactions])
+
+Spend Per Customer =
+DIVIDE([Total Spend], [Total Customers])
+
+Average Credit Limit =
+AVERAGE(Customers[credit_limit])
+
+Average Utilization % =
+AVERAGE(Customers[utilization_ratio])
+
+Active Customers =
+CALCULATE(
+    DISTINCTCOUNT(Customers[customer_id]),
+    Customers[customer_status] = "Active"
+)
+
+Inactive Customers =
+CALCULATE(
+    DISTINCTCOUNT(Customers[customer_id]),
+    Customers[customer_status] = "Inactive"
+)
+
+High Risk Customers =
+CALCULATE(
+    DISTINCTCOUNT(Customers[customer_id]),
+    Customers[churn_risk_segment] = "High"
+)
+
+Monthly Spend =
+CALCULATE(
+    [Total Spend],
+    DATESMTD('Date'[Date])
+)
+
+Previous Month Spend =
+CALCULATE(
+    [Total Spend],
+    DATEADD('Date'[Date], -1, MONTH)
+)
+
+MoM Growth % =
+DIVIDE(
+    [Total Spend] - [Previous Month Spend],
+    [Previous Month Spend]
+)
+
+Previous Year Spend =
+CALCULATE(
+    [Total Spend],
+    SAMEPERIODLASTYEAR('Date'[Date])
+)
+
+YoY Growth % =
+DIVIDE(
+    [Total Spend] - [Previous Year Spend],
+    [Previous Year Spend]
+)
