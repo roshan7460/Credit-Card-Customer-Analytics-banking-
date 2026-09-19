@@ -13,7 +13,15 @@
 
 ### [Open the Public Dashboard →](https://htmlpreview.github.io/?https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-/blob/main/index.html)
 
-The public preview gives recruiters a fast overview of the project. The repository also contains the full interactive Streamlit application with filters and customer-level analysis.
+The public preview gives recruiters a fast overview of the project. The repository also contains the full interactive Streamlit application with filters, customer-value segmentation, and customer-level analysis.
+
+### Project Navigation
+
+- [Recruiter Case Study](CASE_STUDY.md)
+- [Advanced SQL Analysis](advanced_analysis.sql)
+- [Power BI Report Blueprint](POWER_BI_BLUEPRINT.md)
+- [Power BI DAX Measures](powerbi_dax_measures.txt)
+- [Interview Guide](INTERVIEW_GUIDE.md)
 
 ---
 
@@ -43,7 +51,7 @@ Business Insights
 
 | Dataset | Records | Purpose |
 |---|---:|---|
-| Customers | 2,500 | Demographics, card type, income, credit limit, utilization, risk segment |
+| Customers | 2,500 | Demographics, card type, income, credit limit, utilization, risk segment, value segment |
 | Transactions | 40,000 | Date, category, merchant, channel, transaction value |
 
 The dataset is **synthetic and reproducible** with a fixed random seed, so it is safe to publish and easy to regenerate.
@@ -127,6 +135,7 @@ erDiagram
         int outstanding_balance
         float utilization_ratio
         string churn_risk_segment
+        string customer_value_segment
     }
 
     TRANSACTIONS {
@@ -155,13 +164,17 @@ The Streamlit dashboard includes:
 - Card Type filter
 - Gender filter
 - Churn Risk filter
+- Customer Value Segment filter
 - Transaction Date filter
+- Three analytical tabs: Executive Overview, Customer Segmentation, Risk & Engagement
 - Executive KPI cards
 - Monthly transaction trend
 - Spend by category
 - Customers by card type
 - Spend by transaction channel
 - Churn-risk segmentation
+- Customer value segmentation
+- High-utilization customer table
 - Top 10 customers by spend
 - Dynamic business insights
 
@@ -169,7 +182,7 @@ The Streamlit dashboard includes:
 
 ## SQL Analysis
 
-`analysis.sql` includes portfolio-ready queries for:
+`analysis.sql` includes portfolio-ready core queries for:
 
 1. Overall customer KPIs
 2. Total transaction value and count
@@ -181,6 +194,18 @@ The Streamlit dashboard includes:
 8. Churn-risk segmentation
 9. Channel performance
 10. Customer-value bands
+
+`advanced_analysis.sql` adds interview-level SQL using **CTEs and window functions**, including:
+
+- Month-over-month growth with `LAG()`
+- Running totals
+- Customer ranking with `DENSE_RANK()`
+- Ranking within card type using `PARTITION BY`
+- Category contribution percentages
+- Merchant ranking by category
+- Spend quartiles using `NTILE()`
+- High-value / risk intersection analysis
+- Customer recency analysis
 
 ---
 
@@ -197,6 +222,9 @@ The Streamlit dashboard includes:
 - Average Utilization
 - Active / Inactive Customers
 - High-Risk Customers
+- High-Value Customers
+- High-Utilization Customers
+- High-Value Spend %
 - Previous Month Spend
 - Month-over-Month Growth
 - Previous Year Spend
@@ -208,7 +236,9 @@ Suggested Power BI report pages:
 |---|---|
 | Executive Overview | KPIs, transaction trend, card and category performance |
 | Customer Analytics | Demographics, customer value and top customers |
-| Risk & Transactions | Utilization, churn-risk, category and channel analysis |
+| Risk & Transactions | Utilization, churn-risk, value segments, category and channel analysis |
+
+See the full build specification in [POWER_BI_BLUEPRINT.md](POWER_BI_BLUEPRINT.md).
 
 ---
 
@@ -220,9 +250,15 @@ Suggested Power BI report pages:
 ├── data_generator.py            # Reproducible synthetic data
 ├── build_database.py            # SQLite database builder
 ├── schema.sql                   # Database schema
-├── analysis.sql                 # Analytical SQL queries
+├── analysis.sql                 # Core analytical SQL queries
+├── advanced_analysis.sql        # CTEs and window-function SQL
 ├── powerbi_dax_measures.txt     # Power BI DAX measures
+├── POWER_BI_BLUEPRINT.md        # Three-page Power BI design specification
+├── CASE_STUDY.md                # Recruiter-ready business case study
+├── INTERVIEW_GUIDE.md           # Interview preparation using this project
 ├── requirements.txt             # Python dependencies
+├── railway.json                 # Railway deployment configuration
+├── .python-version              # Python 3.11 deployment pin
 ├── index.html                   # Public recruiter-facing dashboard preview
 ├── LICENSE
 ├── .gitignore
@@ -278,6 +314,20 @@ The application will generate the data automatically on first run.
 
 ---
 
+## Deploy on Railway
+
+The repository includes `railway.json` and `.python-version`, so it is ready for Railway deployment with Railpack.
+
+The configured production start command is:
+
+```bash
+streamlit run app.py --server.address 0.0.0.0 --server.port $PORT
+```
+
+Railway configuration also includes an HTTP health check at `/`.
+
+---
+
 ## Build the SQLite Database
 
 ```bash
@@ -322,8 +372,11 @@ GitHub Actions validates the project on every push to `main`:
 - 2,500 customer records are generated
 - 40,000 transaction records are generated
 - IDs remain unique
+- Customer-value segmentation is generated
 - SQLite database builds successfully
-- Transaction row count is verified
+- Core SQL executes successfully
+- Advanced window-function SQL executes successfully
+- Customer and transaction row counts are verified
 
 A green **CI** badge at the top indicates that the latest automated validation passed.
 
@@ -335,7 +388,8 @@ A green **CI** badge at the top indicates that the latest automated validation p
 
 - Built an end-to-end banking analytics project using **40K transaction records** and **2.5K customer records**.
 - Developed SQL queries for KPI analysis, monthly trends, customer segmentation, high-value customers, channel performance, and credit utilization.
-- Built an interactive Streamlit dashboard with filters for card type, gender, churn risk, and transaction date.
+- Built an interactive Streamlit dashboard with executive, segmentation, and risk views plus filters for card type, gender, customer value, churn risk, and transaction date.
+- Used CTEs and SQL window functions for ranking, MoM growth, running totals, quartiles, and recency analysis.
 - Created a Power BI-ready relational model and DAX measures for spend, customer activity, utilization, MoM growth, and YoY growth.
 - Added automated GitHub Actions validation to confirm data generation and database integrity.
 
