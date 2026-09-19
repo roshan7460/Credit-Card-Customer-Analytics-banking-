@@ -1,0 +1,7 @@
+__pycache__/
+.venv/
+*.pyc
+credit_card_analytics.db
+customers.csv
+transactions.csv
+.streamlit/secrets.toml
