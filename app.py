@@ -172,6 +172,42 @@ def inject_styles():
             font-size: .87rem;
             margin-bottom: .9rem;
         }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: .8rem;
+            margin: .3rem 0 1.25rem;
+        }
+        .kpi-card {
+            min-width: 0;
+            background: linear-gradient(145deg, rgba(17,31,53,.98), rgba(12,26,44,.98));
+            border: 1px solid var(--dash-border);
+            border-radius: 15px;
+            padding: 1rem 1.05rem;
+            min-height: 118px;
+            box-shadow: 0 10px 28px rgba(0,0,0,.14);
+        }
+        .kpi-label {
+            color: var(--dash-muted);
+            font-size: .75rem;
+            letter-spacing: .035em;
+            text-transform: uppercase;
+            margin-bottom: .5rem;
+        }
+        .kpi-value {
+            color: var(--dash-text);
+            font-size: clamp(1.35rem, 2vw, 1.8rem);
+            font-weight: 780;
+            line-height: 1.12;
+            overflow-wrap: anywhere;
+            font-variant-numeric: tabular-nums;
+        }
+        .kpi-note {
+            color: #8297AF;
+            font-size: .72rem;
+            margin-top: .45rem;
+            line-height: 1.35;
+        }
         .insight-grid {
             display: grid;
             grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -228,10 +264,12 @@ def inject_styles():
         @media (max-width: 1000px) {
             .dash-header { align-items: flex-start; flex-direction: column; }
             .dash-badges { justify-content: flex-start; }
+            .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .insight-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
         @media (max-width: 640px) {
             .block-container { padding-top: 1rem; }
+            .kpi-grid { grid-template-columns: 1fr; }
             .insight-grid { grid-template-columns: 1fr; }
         }
         </style>
@@ -386,13 +424,43 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-c1, c2, c3, c4, c5, c6 = st.columns(6)
-c1.metric("Customers", f"{total_customers:,}")
-c2.metric("Transaction Value", f"USD {total_spend:,.0f}")
-c3.metric("Transactions", f"{total_txns:,}")
-c4.metric("Avg. Transaction", f"USD {avg_txn:,.2f}")
-c5.metric("Avg. Credit Limit", f"USD {avg_limit:,.0f}")
-c6.metric("Avg. Utilization", f"{avg_util*100:.1f}%")
+st.markdown(
+    f"""
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Customers</div>
+        <div class="kpi-value">{total_customers:,}</div>
+        <div class="kpi-note">Unique customers in the filtered portfolio</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Transaction Value</div>
+        <div class="kpi-value">$ {total_spend:,.2f}</div>
+        <div class="kpi-note">Exact transaction value for the selected period</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Transactions</div>
+        <div class="kpi-value">{total_txns:,}</div>
+        <div class="kpi-note">Complete transaction record count</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Average Transaction Value</div>
+        <div class="kpi-value">$ {avg_txn:,.2f}</div>
+        <div class="kpi-note">Average amount per transaction</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Average Credit Limit</div>
+        <div class="kpi-value">$ {avg_limit:,.2f}</div>
+        <div class="kpi-note">Average credit limit across filtered customers</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Average Utilization</div>
+        <div class="kpi-value">{avg_util*100:.2f}%</div>
+        <div class="kpi-note">Average utilization across filtered customers</div>
+      </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 overview_tab, segment_tab, risk_tab = st.tabs(
     ["Executive Overview", "Customer Segmentation", "Risk & Engagement"]
