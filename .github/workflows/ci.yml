@@ -14,31 +14,53 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
       - name: Install dependencies
         run: pip install -r requirements.txt
+
       - name: Compile Python files
         run: python -m py_compile app.py data_generator.py build_database.py
+
       - name: Generate data
         run: python data_generator.py
+
       - name: Build SQLite database
         run: python build_database.py
-      - name: Validate outputs
+
+      - name: Validate outputs and analytics
         run: |
           python - <<'PY'
           import sqlite3
           import pandas as pd
+
           c = pd.read_csv("customers.csv")
           t = pd.read_csv("transactions.csv")
+
           assert len(c) == 2500
           assert len(t) == 40000
           assert c["customer_id"].is_unique
           assert t["transaction_id"].is_unique
+          assert "customer_value_segment" in c.columns
+          assert set(c["customer_value_segment"]) <= {
+              "High Value", "Growth", "Core", "Low Engagement"
+          }
+
           con = sqlite3.connect("credit_card_analytics.db")
-          n = con.execute("select count(*) from transactions").fetchone()[0]
-          con.close()
+          n = con.execute("SELECT COUNT(*) FROM transactions").fetchone()[0]
+          m = con.execute("SELECT COUNT(*) FROM customers").fetchone()[0]
           assert n == 40000
+          assert m == 2500
+
+          with open("analysis.sql", "r", encoding="utf-8") as f:
+              con.executescript(f.read())
+
+          with open("advanced_analysis.sql", "r", encoding="utf-8") as f:
+              con.executescript(f.read())
+
+          con.close()
           print("Smoke test passed.")
           PY
