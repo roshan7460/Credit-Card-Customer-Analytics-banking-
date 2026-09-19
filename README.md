@@ -6,9 +6,9 @@ End-to-end **Data Analyst portfolio project** using **SQL, Python, Streamlit, Po
 
 ## 🌐 Live Project
 
-### **[▶ Open the Public Dashboard](https://roshan7460.github.io/Credit-Card-Customer-Analytics-banking-/)**
+### **[▶ Open the Public Dashboard](https://htmlpreview.github.io/?https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-/blob/main/index.html)**
 
-Fallback preview: [Open via HTML Preview](https://htmlpreview.github.io/?https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-/blob/main/index.html)
+GitHub Pages: [Open hosted dashboard](https://roshan7460.github.io/Credit-Card-Customer-Analytics-banking-/)
 
 The repository also contains the full Streamlit application. Clone it and run `streamlit run app.py` for interactive filters and customer-level analytics.
 
