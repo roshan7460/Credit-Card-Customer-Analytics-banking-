@@ -4,9 +4,11 @@ End-to-end **Data Analyst portfolio project** using **SQL, Python, Streamlit, Po
 
 [![CI](https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-/actions/workflows/ci.yml/badge.svg)](https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-/actions/workflows/ci.yml)
 
-## 🔗 Live dashboard preview
+## 🌐 Live Project
 
-**[Open the browser dashboard](https://htmlpreview.github.io/?https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-/blob/main/index.html)**
+### **[▶ Open the Public Dashboard](https://roshan7460.github.io/Credit-Card-Customer-Analytics-banking-/)**
+
+Fallback preview: [Open via HTML Preview](https://htmlpreview.github.io/?https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-/blob/main/index.html)
 
 The repository also contains the full Streamlit application. Clone it and run `streamlit run app.py` for interactive filters and customer-level analytics.
 
@@ -37,7 +39,9 @@ Analyze customer behavior, credit-card transaction trends, card usage, credit ut
 ├── requirements.txt
 ├── index.html
 ├── .gitignore
-└── .github/workflows/ci.yml
+└── .github/workflows/
+    ├── ci.yml
+    └── pages.yml
 ```
 
 `customers.csv`, `transactions.csv`, and `credit_card_analytics.db` are generated locally and excluded from Git because they are reproducible.
