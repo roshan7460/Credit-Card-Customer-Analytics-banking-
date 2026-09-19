@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Credit Card Customer Analytics portfolio project using Python, SQL, Streamlit, Power BI and DAX.">
 <title>Credit Card Customer Analytics | Portfolio</title>
-<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 <style>
 :root{
   --navy:#07111f;--navy2:#0b1728;--panel:#0f2036;--panel2:#132842;
@@ -32,11 +31,21 @@ h1{font-size:clamp(38px,6vw,68px);line-height:1.02;margin:0;letter-spacing:-.04e
 .section{padding:34px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:18px}.section h2{font-size:28px;margin:0}.section-copy{color:var(--muted);max-width:680px;line-height:1.6;margin:7px 0 0}
 .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.card{background:rgba(15,32,54,.92);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 14px 32px rgba(0,0,0,.14)}
 .kpi-label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em}.kpi-value{font-size:27px;font-weight:820;margin-top:8px}.kpi-note{font-size:12px;color:#7f94ae;margin-top:4px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.chart{height:390px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.analysis-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.analysis-meta{display:flex;gap:8px;flex-wrap:wrap}
+.analysis-pill{font-size:12px;color:#bfd2e8;border:1px solid var(--line);padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.025)}
+.chart-card{background:linear-gradient(150deg,rgba(16,38,64,.96),rgba(11,28,48,.96));border:1px solid #244463;border-radius:18px;padding:20px;box-shadow:0 18px 38px rgba(0,0,0,.16)}
+.chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}
+.chart-title{font-weight:800;font-size:15px}.chart-sub{font-size:12px;color:var(--muted);margin-top:4px}.chart-value{text-align:right;font-size:13px;color:var(--cyan);font-weight:800;white-space:nowrap}
+.svg-chart{width:100%;height:auto;display:block}.axis-label{fill:#8094ad;font-size:11px}.grid-line{stroke:#203b59;stroke-width:1}.trend-line{fill:none;stroke:#4ea1ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.trend-fill{fill:url(#trendFill)}.trend-dot{fill:#55d6d0;stroke:#0f2036;stroke-width:2}
+.bar-list{display:flex;flex-direction:column;gap:11px}.bar-row{display:grid;grid-template-columns:92px 1fr 64px;align-items:center;gap:10px}.bar-label{font-size:12px;color:#cbd8e8}.bar-track{height:9px;background:#182d48;border-radius:999px;overflow:hidden}.bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#4ea1ff,#55d6d0)}.bar-value{font-size:12px;color:#9fb1c8;text-align:right}
+.donut-wrap{display:grid;grid-template-columns:170px 1fr;gap:24px;align-items:center}.donut{width:158px;height:158px;border-radius:50%;background:conic-gradient(#54d68c 0 63.52%,#ffc55c 63.52% 82%,#ff7b7b 82% 100%);position:relative;margin:auto}.donut:after{content:"";position:absolute;inset:27px;border-radius:50%;background:#0f2036;border:1px solid #213b5b}.donut-center{position:absolute;inset:0;display:grid;place-content:center;text-align:center;z-index:2}.donut-center b{font-size:24px}.donut-center span{font-size:11px;color:var(--muted)}.legend{display:flex;flex-direction:column;gap:11px}.legend-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px}.legend-name{display:flex;align-items:center;gap:8px;color:#cbd8e8}.dot{width:9px;height:9px;border-radius:50%}.legend-val{color:var(--muted)}
+.executive-callout{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 16px}.exec-item{background:rgba(78,161,255,.06);border:1px solid rgba(78,161,255,.16);border-radius:13px;padding:13px 15px}.exec-item small{color:var(--muted);display:block;margin-bottom:5px}.exec-item strong{font-size:15px}
 .insights{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.insight{background:linear-gradient(145deg,#10243c,#0d1d32);border:1px solid var(--line);border-radius:16px;padding:19px}.insight b{font-size:23px;display:block;margin-bottom:7px}.insight span{color:var(--muted);font-size:14px;line-height:1.55}
 .method{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.step{border:1px solid var(--line);border-radius:14px;padding:16px;background:rgba(255,255,255,.02)}.step small{color:var(--cyan);font-weight:800}.step strong{display:block;margin:8px 0 5px}.step span{font-size:13px;color:var(--muted)}
 .footer{padding:46px 0 60px;color:var(--muted);font-size:13px;border-top:1px solid rgba(255,255,255,.06);margin-top:34px}
-@media(max-width:980px){.hero{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr)}.method{grid-template-columns:1fr 1fr}.insights{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+@media(max-width:980px){.hero{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr)}.method{grid-template-columns:1fr 1fr}.insights{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.executive-callout{grid-template-columns:1fr}.donut-wrap{grid-template-columns:1fr}}
 @media(max-width:620px){.nav-links{display:none}.kpis{grid-template-columns:1fr 1fr}.method{grid-template-columns:1fr}.hero{padding-top:48px}}
 </style>
 </head>
@@ -90,17 +99,102 @@ h1{font-size:clamp(38px,6vw,68px);line-height:1.02;margin:0;letter-spacing:-.04e
   </section>
 
   <section class="section" id="analysis">
-    <div class="section-head">
-      <div><h2>Executive Analysis</h2><p class="section-copy">A recruiter-facing view of the same analytical themes implemented in the runnable Streamlit application and SQL layer.</p></div>
+    <div class="analysis-toolbar">
+      <div>
+        <div class="eyebrow" style="margin-bottom:8px">Portfolio performance</div>
+        <h2>Executive Analysis</h2>
+        <p class="section-copy">A concise management view of transaction momentum, customer mix, channel behavior, and engagement risk—built from the same validated dataset used by the Streamlit and SQL layers.</p>
+      </div>
+      <div class="analysis-meta">
+        <span class="analysis-pill">2025 portfolio</span>
+        <span class="analysis-pill">40,000 transactions</span>
+        <span class="analysis-pill">2,500 customers</span>
+      </div>
     </div>
-    <div class="card"><div id="monthly" class="chart"></div></div>
-    <div class="grid2" style="margin-top:16px">
-      <div class="card"><div id="category" class="chart"></div></div>
-      <div class="card"><div id="cards" class="chart"></div></div>
+
+    <div class="executive-callout">
+      <div class="exec-item"><small>Largest spend category</small><strong>Shopping · 25.7%</strong></div>
+      <div class="exec-item"><small>Largest transaction channel</small><strong>Online · 46.7%</strong></div>
+      <div class="exec-item"><small>Strongest month</small><strong>May · $418K</strong></div>
     </div>
+
+    <div class="chart-card">
+      <div class="chart-head">
+        <div><div class="chart-title">Monthly Transaction Value</div><div class="chart-sub">Portfolio spend remained stable throughout 2025, with May recording the highest value.</div></div>
+        <div class="chart-value">$4.77M total</div>
+      </div>
+      <svg class="svg-chart" viewBox="0 0 1000 300" role="img" aria-label="Monthly transaction value line chart">
+        <defs>
+          <linearGradient id="trendFill" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#4ea1ff" stop-opacity=".28"/>
+            <stop offset="100%" stop-color="#4ea1ff" stop-opacity=".02"/>
+          </linearGradient>
+        </defs>
+        <line class="grid-line" x1="58" y1="48" x2="960" y2="48"/><line class="grid-line" x1="58" y1="105" x2="960" y2="105"/>
+        <line class="grid-line" x1="58" y1="162" x2="960" y2="162"/><line class="grid-line" x1="58" y1="219" x2="960" y2="219"/>
+        <text class="axis-label" x="8" y="52">$420K</text><text class="axis-label" x="8" y="109">$400K</text><text class="axis-label" x="8" y="166">$380K</text><text class="axis-label" x="8" y="223">$360K</text>
+        <path class="trend-fill" d="M70 115 L150 238 L230 76 L310 129 L390 52 L470 154 L550 101 L630 111 L710 77 L790 93 L870 101 L950 93 L950 250 L70 250 Z"/>
+        <path class="trend-line" d="M70 115 L150 238 L230 76 L310 129 L390 52 L470 154 L550 101 L630 111 L710 77 L790 93 L870 101 L950 93"/>
+        <g>
+          <circle class="trend-dot" cx="70" cy="115" r="5"/><circle class="trend-dot" cx="150" cy="238" r="5"/><circle class="trend-dot" cx="230" cy="76" r="5"/><circle class="trend-dot" cx="310" cy="129" r="5"/>
+          <circle class="trend-dot" cx="390" cy="52" r="6"/><circle class="trend-dot" cx="470" cy="154" r="5"/><circle class="trend-dot" cx="550" cy="101" r="5"/><circle class="trend-dot" cx="630" cy="111" r="5"/>
+          <circle class="trend-dot" cx="710" cy="77" r="5"/><circle class="trend-dot" cx="790" cy="93" r="5"/><circle class="trend-dot" cx="870" cy="101" r="5"/><circle class="trend-dot" cx="950" cy="93" r="5"/>
+        </g>
+        <g class="axis-label" text-anchor="middle">
+          <text x="70" y="277">Jan</text><text x="150" y="277">Feb</text><text x="230" y="277">Mar</text><text x="310" y="277">Apr</text>
+          <text x="390" y="277">May</text><text x="470" y="277">Jun</text><text x="550" y="277">Jul</text><text x="630" y="277">Aug</text>
+          <text x="710" y="277">Sep</text><text x="790" y="277">Oct</text><text x="870" y="277">Nov</text><text x="950" y="277">Dec</text>
+        </g>
+      </svg>
+    </div>
+
     <div class="grid2" style="margin-top:16px">
-      <div class="card"><div id="risk" class="chart"></div></div>
-      <div class="card"><div id="channel" class="chart"></div></div>
+      <div class="chart-card">
+        <div class="chart-head"><div><div class="chart-title">Transaction Value by Category</div><div class="chart-sub">Shopping and Travel account for the largest share of portfolio spend.</div></div><div class="chart-value">Top 8 categories</div></div>
+        <div class="bar-list">
+          <div class="bar-row"><span class="bar-label">Shopping</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-value">$1.23M</span></div>
+          <div class="bar-row"><span class="bar-label">Travel</span><div class="bar-track"><div class="bar-fill" style="width:76%"></div></div><span class="bar-value">$932K</span></div>
+          <div class="bar-row"><span class="bar-label">Dining</span><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div><span class="bar-value">$608K</span></div>
+          <div class="bar-row"><span class="bar-label">Groceries</span><div class="bar-track"><div class="bar-fill" style="width:46%"></div></div><span class="bar-value">$565K</span></div>
+          <div class="bar-row"><span class="bar-label">Utilities</span><div class="bar-track"><div class="bar-fill" style="width:42%"></div></div><span class="bar-value">$511K</span></div>
+          <div class="bar-row"><span class="bar-label">Healthcare</span><div class="bar-track"><div class="bar-fill" style="width:28%"></div></div><span class="bar-value">$341K</span></div>
+          <div class="bar-row"><span class="bar-label">Fuel</span><div class="bar-track"><div class="bar-fill" style="width:25%"></div></div><span class="bar-value">$312K</span></div>
+          <div class="bar-row"><span class="bar-label">Entertainment</span><div class="bar-track"><div class="bar-fill" style="width:22%"></div></div><span class="bar-value">$275K</span></div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-head"><div><div class="chart-title">Customers by Card Type</div><div class="chart-sub">Silver is the largest card segment, followed by Classic.</div></div><div class="chart-value">2,500 customers</div></div>
+        <div class="bar-list" style="margin-top:34px">
+          <div class="bar-row"><span class="bar-label">Silver</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-value">1,120</span></div>
+          <div class="bar-row"><span class="bar-label">Classic</span><div class="bar-track"><div class="bar-fill" style="width:83%"></div></div><span class="bar-value">930</span></div>
+          <div class="bar-row"><span class="bar-label">Gold</span><div class="bar-track"><div class="bar-fill" style="width:33%"></div></div><span class="bar-value">374</span></div>
+          <div class="bar-row"><span class="bar-label">Platinum</span><div class="bar-track"><div class="bar-fill" style="width:7%"></div></div><span class="bar-value">76</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-top:16px">
+      <div class="chart-card">
+        <div class="chart-head"><div><div class="chart-title">Rule-Based Risk Segmentation</div><div class="chart-sub">Most customers sit in the Low segment; 18% fall into High.</div></div><div class="chart-value">Customer mix</div></div>
+        <div class="donut-wrap">
+          <div class="donut"><div class="donut-center"><b>2,500</b><span>customers</span></div></div>
+          <div class="legend">
+            <div class="legend-row"><span class="legend-name"><i class="dot" style="background:#54d68c"></i>Low</span><span class="legend-val">1,588 · 63.5%</span></div>
+            <div class="legend-row"><span class="legend-name"><i class="dot" style="background:#ffc55c"></i>Medium</span><span class="legend-val">462 · 18.5%</span></div>
+            <div class="legend-row"><span class="legend-name"><i class="dot" style="background:#ff7b7b"></i>High</span><span class="legend-val">450 · 18.0%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-head"><div><div class="chart-title">Transaction Value by Channel</div><div class="chart-sub">Online leads the portfolio, with POS remaining a substantial secondary channel.</div></div><div class="chart-value">$4.77M total</div></div>
+        <div class="bar-list" style="margin-top:34px">
+          <div class="bar-row"><span class="bar-label">Online</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-value">$2.23M</span></div>
+          <div class="bar-row"><span class="bar-label">POS</span><div class="bar-track"><div class="bar-fill" style="width:82%"></div></div><span class="bar-value">$1.82M</span></div>
+          <div class="bar-row"><span class="bar-label">Contactless</span><div class="bar-track"><div class="bar-fill" style="width:32%"></div></div><span class="bar-value">$720K</span></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -136,13 +230,5 @@ h1{font-size:clamp(38px,6vw,68px);line-height:1.02;margin:0;letter-spacing:-.04e
   </footer>
 </main>
 
-<script>
-const base={paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',font:{color:'#f4f7fb',family:'Inter,Segoe UI,sans-serif'},margin:{t:58,r:20,b:50,l:66},xaxis:{gridcolor:'#213b5b',zerolinecolor:'#213b5b'},yaxis:{gridcolor:'#213b5b',zerolinecolor:'#213b5b'}};
-Plotly.newPlot('monthly',[{x:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],y:[396413,353565,410155,391485,418405,382636,401330,397788,409636,404016,401415,404235],type:'scatter',mode:'lines+markers',line:{width:3,color:'#4ea1ff'},marker:{size:7,color:'#55d6d0'},hovertemplate:'%{x}<br>$%{y:,.0f}<extra></extra>'}],{...base,title:{text:'Monthly Transaction Value',x:.02},yaxis:{...base.yaxis,title:'USD'}},{responsive:true,displayModeBar:false});
-Plotly.newPlot('category',[{x:['Shopping','Travel','Dining','Groceries','Utilities','Healthcare','Fuel','Entertainment'],y:[1226298,931853,608473,565232,510799,340896,312411,275115],type:'bar',marker:{color:'#4ea1ff'},hovertemplate:'%{x}<br>$%{y:,.0f}<extra></extra>'}],{...base,title:{text:'Transaction Value by Category',x:.02},xaxis:{tickangle:-25},yaxis:{...base.yaxis,title:'USD'}},{responsive:true,displayModeBar:false});
-Plotly.newPlot('cards',[{x:['Classic','Silver','Gold','Platinum'],y:[930,1120,374,76],type:'bar',marker:{color:['#7896b7','#55d6d0','#ffc55c','#9b8cff']},hovertemplate:'%{x}<br>%{y:,} customers<extra></extra>'}],{...base,title:{text:'Customers by Card Type',x:.02},yaxis:{...base.yaxis,title:'Customers'}},{responsive:true,displayModeBar:false});
-Plotly.newPlot('risk',[{labels:['Low','Medium','High'],values:[1588,462,450],type:'pie',hole:.55,marker:{colors:['#54d68c','#ffc55c','#ff7b7b']},textinfo:'label+percent',hovertemplate:'%{label}: %{value:,} customers<extra></extra>'}],{...base,title:{text:'Rule-Based Risk Segmentation',x:.02}},{responsive:true,displayModeBar:false});
-Plotly.newPlot('channel',[{x:['Online','POS','Contactless'],y:[2228995,1822524,719559],type:'bar',marker:{color:'#55d6d0'},hovertemplate:'%{x}<br>$%{y:,.0f}<extra></extra>'}],{...base,title:{text:'Transaction Value by Channel',x:.02},yaxis:{...base.yaxis,title:'USD'}},{responsive:true,displayModeBar:false});
-</script>
 </body>
 </html>
