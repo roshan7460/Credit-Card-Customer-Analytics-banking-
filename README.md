@@ -11,9 +11,11 @@
 
 ## Live Demo
 
-### [Open the Public Dashboard →](https://htmlpreview.github.io/?https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-/blob/main/index.html)
+### [Open the Live Interactive Dashboard →](https://credit-card-analytics-production.up.railway.app/)
 
-The public preview gives recruiters a fast overview of the project. The repository also contains the full interactive Streamlit application with filters, customer-value segmentation, and customer-level analysis.
+The live application is deployed on Railway and runs the full Streamlit dashboard with interactive filters, customer-value segmentation, customer-level analysis, and risk views.
+
+Static recruiter preview: [Open HTML dashboard preview](https://htmlpreview.github.io/?https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-/blob/main/index.html)
 
 ### Project Navigation
 
