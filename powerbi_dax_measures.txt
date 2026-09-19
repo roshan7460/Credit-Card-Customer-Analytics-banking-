@@ -33,17 +33,41 @@ CALCULATE(
     Customers[customer_status] = "Inactive"
 )
 
+Active Customer % =
+DIVIDE([Active Customers], [Total Customers])
+
 High Risk Customers =
 CALCULATE(
     DISTINCTCOUNT(Customers[customer_id]),
     Customers[churn_risk_segment] = "High"
 )
 
-Monthly Spend =
+High Risk Customer % =
+DIVIDE([High Risk Customers], [Total Customers])
+
+High Value Customers =
+CALCULATE(
+    DISTINCTCOUNT(Customers[customer_id]),
+    Customers[customer_value_segment] = "High Value"
+)
+
+High Value Customer % =
+DIVIDE([High Value Customers], [Total Customers])
+
+High Utilization Customers =
+CALCULATE(
+    DISTINCTCOUNT(Customers[customer_id]),
+    Customers[utilization_ratio] >= 0.70
+)
+
+High Value Spend =
 CALCULATE(
     [Total Spend],
-    DATESMTD('Date'[Date])
+    Customers[customer_value_segment] = "High Value"
 )
+
+High Value Spend % =
+DIVIDE([High Value Spend], [Total Spend])
 
 Previous Month Spend =
 CALCULATE(
@@ -67,4 +91,19 @@ YoY Growth % =
 DIVIDE(
     [Total Spend] - [Previous Year Spend],
     [Previous Year Spend]
+)
+
+YTD Spend =
+TOTALYTD(
+    [Total Spend],
+    'Date'[Date]
+)
+
+Transaction Share % =
+DIVIDE(
+    [Total Spend],
+    CALCULATE(
+        [Total Spend],
+        ALL(Transactions[transaction_category])
+    )
 )
