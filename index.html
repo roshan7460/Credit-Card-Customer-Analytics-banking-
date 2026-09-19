@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Credit Card Customer Analytics</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+:root{--bg:#0b1020;--panel:#121a2f;--panel2:#18233d;--text:#eaf0ff;--muted:#9ba9c7;--accent:#6ea8fe;--good:#50c878;--warn:#ffc857;--bad:#ff6b6b}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#090d18,#101a32);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
+.container{max-width:1220px;margin:auto;padding:28px 18px 56px}.top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+h1{margin:0 0 8px;font-size:clamp(28px,4vw,48px)}.sub{color:var(--muted);max-width:760px;line-height:1.6}
+.badge{display:inline-block;padding:7px 11px;border:1px solid #30415f;border-radius:999px;color:#b9c8e8;margin:4px 4px 0 0;font-size:13px}
+.actions a{display:inline-block;text-decoration:none;color:white;background:#2563eb;padding:11px 16px;border-radius:10px;font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:26px 0}
+.card{background:rgba(18,26,47,.93);border:1px solid #263451;border-radius:16px;padding:18px;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.kpi-label{color:var(--muted);font-size:13px}.kpi-value{font-size:26px;font-weight:800;margin-top:7px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.chart{height:385px}.insights ul{margin:8px 0 0;padding-left:20px;line-height:1.75}.footer{margin-top:25px;color:var(--muted);font-size:13px}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}} @media(max-width:520px){.kpis{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="top">
+    <div>
+      <h1>💳 Credit Card Customer Analytics</h1>
+      <div class="sub">Interactive portfolio preview for a banking analytics project covering customer segmentation, transaction behavior, credit utilization, card performance and churn-risk indicators.</div>
+      <div style="margin-top:12px">
+        <span class="badge">SQL</span><span class="badge">Power BI</span><span class="badge">DAX</span><span class="badge">Python</span><span class="badge">Streamlit</span>
+      </div>
+    </div>
+    <div class="actions"><a href="https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-" target="_blank">View Source on GitHub</a></div>
+  </div>
+
+  <div class="kpis">
+    <div class="card"><div class="kpi-label">Customers</div><div class="kpi-value">2,500</div></div>
+    <div class="card"><div class="kpi-label">Transactions</div><div class="kpi-value">40,000</div></div>
+    <div class="card"><div class="kpi-label">Total Spend</div><div class="kpi-value">$5.84M</div></div>
+    <div class="card"><div class="kpi-label">Avg. Txn Value</div><div class="kpi-value">$146</div></div>
+    <div class="card"><div class="kpi-label">Avg. Utilization</div><div class="kpi-value">18.7%</div></div>
+    <div class="card"><div class="kpi-label">Dataset</div><div class="kpi-value">Synthetic</div></div>
+  </div>
+
+  <div class="card"><div id="monthly" class="chart"></div></div>
+
+  <div class="grid2">
+    <div class="card"><div id="category" class="chart"></div></div>
+    <div class="card"><div id="cards" class="chart"></div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card"><div id="risk" class="chart"></div></div>
+    <div class="card"><div id="channel" class="chart"></div></div>
+  </div>
+
+  <div class="card insights">
+    <h2 style="margin-top:0">Key Business Questions</h2>
+    <ul>
+      <li>Which card segments generate the highest transaction value?</li>
+      <li>Which spending categories and channels dominate customer activity?</li>
+      <li>Which customers show high credit utilization or low engagement?</li>
+      <li>How do monthly transaction trends change through the year?</li>
+      <li>Which customer groups should be prioritized for retention or cross-sell analysis?</li>
+    </ul>
+  </div>
+
+  <div class="footer">Portfolio preview. The repository contains the runnable Streamlit app, SQL analysis, database builder and Power BI/DAX assets. Churn-risk segmentation is rule-based and not a production ML prediction.</div>
+</div>
+<script>
+const layoutBase={paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',font:{color:'#eaf0ff'},margin:{t:55,r:25,b:50,l:65},xaxis:{gridcolor:'#263451'},yaxis:{gridcolor:'#263451'}};
+Plotly.newPlot('monthly',[{x:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],y:[420,438,451,468,472,489,501,493,515,527,540,526],type:'scatter',mode:'lines+markers',line:{width:3,color:'#6ea8fe'},marker:{size:7}}],{...layoutBase,title:'Monthly Transaction Spend (USD thousands)',yaxis:{...layoutBase.yaxis,title:'$000s'}},{responsive:true,displayModeBar:false});
+Plotly.newPlot('category',[{x:['Shopping','Travel','Dining','Healthcare','Utilities','Groceries','Entertainment','Fuel'],y:[1190,890,810,720,650,610,500,470],type:'bar',marker:{color:'#6ea8fe'}}],{...layoutBase,title:'Spend by Category (USD thousands)',xaxis:{tickangle:-30},yaxis:{...layoutBase.yaxis,title:'$000s'}},{responsive:true,displayModeBar:false});
+Plotly.newPlot('cards',[{x:['Classic','Silver','Gold','Platinum'],y:[830,960,570,140],type:'bar',marker:{color:['#8193b2','#8aa7c7','#ffc857','#c084fc']}}],{...layoutBase,title:'Customers by Card Type',yaxis:{...layoutBase.yaxis,title:'Customers'}},{responsive:true,displayModeBar:false});
+Plotly.newPlot('risk',[{labels:['Low','Medium','High'],values:[1540,670,290],type:'pie',hole:.48,marker:{colors:['#50c878','#ffc857','#ff6b6b']},textinfo:'label+percent'}],{...layoutBase,title:'Churn-Risk Segmentation'},{responsive:true,displayModeBar:false});
+Plotly.newPlot('channel',[{x:['Online','POS','Contactless'],y:[2820,2180,840],type:'bar',marker:{color:'#50c878'}}],{...layoutBase,title:'Spend by Channel (USD thousands)',yaxis:{...layoutBase.yaxis,title:'$000s'}},{responsive:true,displayModeBar:false});
+</script>
+</body>
+</html>
