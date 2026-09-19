@@ -14,7 +14,8 @@ CREATE TABLE customers (
     customer_status TEXT,
     outstanding_balance REAL,
     utilization_ratio REAL,
-    churn_risk_segment TEXT
+    churn_risk_segment TEXT,
+    customer_value_segment TEXT
 );
 
 CREATE TABLE transactions (
