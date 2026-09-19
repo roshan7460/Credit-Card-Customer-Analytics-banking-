@@ -1,78 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Credit Card Customer Analytics</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Credit Card Customer Analytics portfolio project using Python, SQL, Streamlit, Power BI and DAX.">
+<title>Credit Card Customer Analytics | Portfolio</title>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 <style>
-:root{--bg:#0b1020;--panel:#121a2f;--panel2:#18233d;--text:#eaf0ff;--muted:#9ba9c7;--accent:#6ea8fe;--good:#50c878;--warn:#ffc857;--bad:#ff6b6b}
-*{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#090d18,#101a32);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
-.container{max-width:1220px;margin:auto;padding:28px 18px 56px}.top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
-h1{margin:0 0 8px;font-size:clamp(28px,4vw,48px)}.sub{color:var(--muted);max-width:760px;line-height:1.6}
-.badge{display:inline-block;padding:7px 11px;border:1px solid #30415f;border-radius:999px;color:#b9c8e8;margin:4px 4px 0 0;font-size:13px}
-.actions a{display:inline-block;text-decoration:none;color:white;background:#2563eb;padding:11px 16px;border-radius:10px;font-weight:700}
-.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:26px 0}
-.card{background:rgba(18,26,47,.93);border:1px solid #263451;border-radius:16px;padding:18px;box-shadow:0 12px 30px rgba(0,0,0,.18)}
-.kpi-label{color:var(--muted);font-size:13px}.kpi-value{font-size:26px;font-weight:800;margin-top:7px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
-.chart{height:385px}.insights ul{margin:8px 0 0;padding-left:20px;line-height:1.75}.footer{margin-top:25px;color:var(--muted);font-size:13px}
-@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}} @media(max-width:520px){.kpis{grid-template-columns:1fr}}
+:root{
+  --navy:#07111f;--navy2:#0b1728;--panel:#0f2036;--panel2:#132842;
+  --line:#213b5b;--text:#f4f7fb;--muted:#9fb1c8;--blue:#4ea1ff;
+  --cyan:#55d6d0;--green:#54d68c;--amber:#ffc55c;--red:#ff7b7b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(180deg,var(--navy),#081524 55%,#07111f);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:inherit}
+.container{max-width:1200px;margin:0 auto;padding:0 22px}
+.nav{position:sticky;top:0;z-index:10;background:rgba(7,17,31,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-inner{height:68px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{font-weight:800;letter-spacing:.2px}.brand span{color:var(--blue)}
+.nav-links{display:flex;gap:20px;color:var(--muted);font-size:14px}.nav-links a{text-decoration:none}.nav-links a:hover{color:var(--text)}
+.hero{padding:72px 0 32px;display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:center}
+.eyebrow{color:var(--cyan);text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:800;margin-bottom:14px}
+h1{font-size:clamp(38px,6vw,68px);line-height:1.02;margin:0;letter-spacing:-.04em}
+.hero p{color:var(--muted);font-size:18px;line-height:1.7;max-width:760px;margin:22px 0}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 28px}.tag{border:1px solid var(--line);background:rgba(19,40,66,.6);padding:7px 11px;border-radius:999px;color:#c9d7e8;font-size:13px}
+.actions{display:flex;gap:12px;flex-wrap:wrap}.btn{display:inline-block;text-decoration:none;padding:12px 17px;border-radius:10px;font-weight:750;font-size:14px}.primary{background:var(--blue);color:#06111e}.secondary{border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.hero-card{background:linear-gradient(145deg,#122c4b,#0d2037);border:1px solid #244668;border-radius:22px;padding:24px;box-shadow:0 25px 70px rgba(0,0,0,.35)}
+.hero-card h3{margin:0 0 12px;font-size:15px;color:#c8d6e8}.big-number{font-size:46px;font-weight:850;letter-spacing:-.04em}.hero-card p{font-size:14px;margin:4px 0 0}
+.section{padding:34px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:18px}.section h2{font-size:28px;margin:0}.section-copy{color:var(--muted);max-width:680px;line-height:1.6;margin:7px 0 0}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.card{background:rgba(15,32,54,.92);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 14px 32px rgba(0,0,0,.14)}
+.kpi-label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em}.kpi-value{font-size:27px;font-weight:820;margin-top:8px}.kpi-note{font-size:12px;color:#7f94ae;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.chart{height:390px}
+.insights{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.insight{background:linear-gradient(145deg,#10243c,#0d1d32);border:1px solid var(--line);border-radius:16px;padding:19px}.insight b{font-size:23px;display:block;margin-bottom:7px}.insight span{color:var(--muted);font-size:14px;line-height:1.55}
+.method{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.step{border:1px solid var(--line);border-radius:14px;padding:16px;background:rgba(255,255,255,.02)}.step small{color:var(--cyan);font-weight:800}.step strong{display:block;margin:8px 0 5px}.step span{font-size:13px;color:var(--muted)}
+.footer{padding:46px 0 60px;color:var(--muted);font-size:13px;border-top:1px solid rgba(255,255,255,.06);margin-top:34px}
+@media(max-width:980px){.hero{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr)}.method{grid-template-columns:1fr 1fr}.insights{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+@media(max-width:620px){.nav-links{display:none}.kpis{grid-template-columns:1fr 1fr}.method{grid-template-columns:1fr}.hero{padding-top:48px}}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="top">
+<nav class="nav">
+  <div class="container nav-inner">
+    <div class="brand">Credit Card <span>Analytics</span></div>
+    <div class="nav-links">
+      <a href="#overview">Overview</a>
+      <a href="#analysis">Analysis</a>
+      <a href="#insights">Insights</a>
+      <a href="https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-" target="_blank">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <section class="hero" id="overview">
     <div>
-      <h1>💳 Credit Card Customer Analytics</h1>
-      <div class="sub">Interactive portfolio preview for a banking analytics project covering customer segmentation, transaction behavior, credit utilization, card performance and churn-risk indicators.</div>
-      <div style="margin-top:12px">
-        <span class="badge">SQL</span><span class="badge">Power BI</span><span class="badge">DAX</span><span class="badge">Python</span><span class="badge">Streamlit</span>
+      <div class="eyebrow">Data Analyst Portfolio Project</div>
+      <h1>Credit Card Customer & Transaction Analytics</h1>
+      <p>An end-to-end banking analytics project demonstrating customer segmentation, transaction analysis, credit utilization, SQL reporting, dashboard design, and Power BI-ready business intelligence.</p>
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">SQLite</span>
+        <span class="tag">Streamlit</span><span class="tag">Plotly</span><span class="tag">Power BI</span><span class="tag">DAX</span>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-" target="_blank">View Source Code</a>
+        <a class="btn secondary" href="#analysis">Explore Analysis</a>
       </div>
     </div>
-    <div class="actions"><a href="https://github.com/roshan7460/Credit-Card-Customer-Analytics-banking-" target="_blank">View Source on GitHub</a></div>
-  </div>
+    <div class="hero-card">
+      <h3>PORTFOLIO DATASET</h3>
+      <div class="big-number">40K</div>
+      <p>transaction records across 2,500 synthetic customers</p>
+      <div style="height:1px;background:#244668;margin:22px 0"></div>
+      <h3>END-TO-END WORKFLOW</h3>
+      <p>Data generation → SQL → dashboard → DAX → business insights</p>
+    </div>
+  </section>
 
-  <div class="kpis">
-    <div class="card"><div class="kpi-label">Customers</div><div class="kpi-value">2,500</div></div>
-    <div class="card"><div class="kpi-label">Transactions</div><div class="kpi-value">40,000</div></div>
-    <div class="card"><div class="kpi-label">Total Spend</div><div class="kpi-value">$5.84M</div></div>
-    <div class="card"><div class="kpi-label">Avg. Txn Value</div><div class="kpi-value">$146</div></div>
-    <div class="card"><div class="kpi-label">Avg. Utilization</div><div class="kpi-value">18.7%</div></div>
-    <div class="card"><div class="kpi-label">Dataset</div><div class="kpi-value">Synthetic</div></div>
-  </div>
+  <section class="section">
+    <div class="kpis">
+      <div class="card"><div class="kpi-label">Customers</div><div class="kpi-value">2,500</div><div class="kpi-note">Synthetic profiles</div></div>
+      <div class="card"><div class="kpi-label">Transactions</div><div class="kpi-value">40,000</div><div class="kpi-note">2025 activity</div></div>
+      <div class="card"><div class="kpi-label">Transaction Value</div><div class="kpi-value">$4.77M</div><div class="kpi-note">Total portfolio spend</div></div>
+      <div class="card"><div class="kpi-label">Avg. Transaction</div><div class="kpi-value">$119.28</div><div class="kpi-note">Per transaction</div></div>
+      <div class="card"><div class="kpi-label">Avg. Credit Limit</div><div class="kpi-value">$39.4K</div><div class="kpi-note">Per customer</div></div>
+      <div class="card"><div class="kpi-label">Avg. Utilization</div><div class="kpi-value">15.8%</div><div class="kpi-note">Rule-based portfolio metric</div></div>
+    </div>
+  </section>
 
-  <div class="card"><div id="monthly" class="chart"></div></div>
+  <section class="section" id="analysis">
+    <div class="section-head">
+      <div><h2>Executive Analysis</h2><p class="section-copy">A recruiter-facing view of the same analytical themes implemented in the runnable Streamlit application and SQL layer.</p></div>
+    </div>
+    <div class="card"><div id="monthly" class="chart"></div></div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="card"><div id="category" class="chart"></div></div>
+      <div class="card"><div id="cards" class="chart"></div></div>
+    </div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="card"><div id="risk" class="chart"></div></div>
+      <div class="card"><div id="channel" class="chart"></div></div>
+    </div>
+  </section>
 
-  <div class="grid2">
-    <div class="card"><div id="category" class="chart"></div></div>
-    <div class="card"><div id="cards" class="chart"></div></div>
-  </div>
+  <section class="section" id="insights">
+    <div class="section-head">
+      <div><h2>Key Business Insights</h2><p class="section-copy">Insights are calculated from the deterministic synthetic portfolio dataset generated by the project.</p></div>
+    </div>
+    <div class="insights">
+      <div class="insight"><b>25.7%</b><span>of total transaction value comes from <strong>Shopping</strong>, the largest category.</span></div>
+      <div class="insight"><b>46.7%</b><span>of transaction value is generated through the <strong>Online</strong> channel.</span></div>
+      <div class="insight"><b>18.0%</b><span>of customers fall into the rule-based <strong>High Risk</strong> engagement segment.</span></div>
+      <div class="insight"><b>44.8%</b><span>of the customer base holds a <strong>Silver</strong> card.</span></div>
+      <div class="insight"><b>$418K</b><span>transaction value in <strong>May 2025</strong>, the strongest month in the generated data.</span></div>
+      <div class="insight"><b>85.3%</b><span>of customers are marked <strong>Active</strong> in the portfolio dataset.</span></div>
+    </div>
+  </section>
 
-  <div class="grid2">
-    <div class="card"><div id="risk" class="chart"></div></div>
-    <div class="card"><div id="channel" class="chart"></div></div>
-  </div>
+  <section class="section">
+    <div class="section-head">
+      <div><h2>Analytics Workflow</h2><p class="section-copy">The repository is structured to demonstrate more than a dashboard: it shows the full path from data creation to validated analysis.</p></div>
+    </div>
+    <div class="method">
+      <div class="step"><small>01</small><strong>Generate</strong><span>Python creates reproducible customer and transaction data.</span></div>
+      <div class="step"><small>02</small><strong>Model</strong><span>Customer and transaction tables use a one-to-many relationship.</span></div>
+      <div class="step"><small>03</small><strong>Analyze</strong><span>SQL queries calculate KPIs, trends, segments and top customers.</span></div>
+      <div class="step"><small>04</small><strong>Visualize</strong><span>Streamlit and Plotly provide interactive dashboard exploration.</span></div>
+      <div class="step"><small>05</small><strong>Validate</strong><span>GitHub Actions checks data generation and SQLite integrity.</span></div>
+    </div>
+  </section>
 
-  <div class="card insights">
-    <h2 style="margin-top:0">Key Business Questions</h2>
-    <ul>
-      <li>Which card segments generate the highest transaction value?</li>
-      <li>Which spending categories and channels dominate customer activity?</li>
-      <li>Which customers show high credit utilization or low engagement?</li>
-      <li>How do monthly transaction trends change through the year?</li>
-      <li>Which customer groups should be prioritized for retention or cross-sell analysis?</li>
-    </ul>
-  </div>
+  <footer class="footer">
+    Synthetic-data analytics portfolio project. Risk segmentation is for demonstration only and is not a lending, underwriting, or creditworthiness model.
+  </footer>
+</main>
 
-  <div class="footer">Portfolio preview. The repository contains the runnable Streamlit app, SQL analysis, database builder and Power BI/DAX assets. Churn-risk segmentation is rule-based and not a production ML prediction.</div>
-</div>
 <script>
-const layoutBase={paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',font:{color:'#eaf0ff'},margin:{t:55,r:25,b:50,l:65},xaxis:{gridcolor:'#263451'},yaxis:{gridcolor:'#263451'}};
-Plotly.newPlot('monthly',[{x:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],y:[420,438,451,468,472,489,501,493,515,527,540,526],type:'scatter',mode:'lines+markers',line:{width:3,color:'#6ea8fe'},marker:{size:7}}],{...layoutBase,title:'Monthly Transaction Spend (USD thousands)',yaxis:{...layoutBase.yaxis,title:'$000s'}},{responsive:true,displayModeBar:false});
-Plotly.newPlot('category',[{x:['Shopping','Travel','Dining','Healthcare','Utilities','Groceries','Entertainment','Fuel'],y:[1190,890,810,720,650,610,500,470],type:'bar',marker:{color:'#6ea8fe'}}],{...layoutBase,title:'Spend by Category (USD thousands)',xaxis:{tickangle:-30},yaxis:{...layoutBase.yaxis,title:'$000s'}},{responsive:true,displayModeBar:false});
-Plotly.newPlot('cards',[{x:['Classic','Silver','Gold','Platinum'],y:[830,960,570,140],type:'bar',marker:{color:['#8193b2','#8aa7c7','#ffc857','#c084fc']}}],{...layoutBase,title:'Customers by Card Type',yaxis:{...layoutBase.yaxis,title:'Customers'}},{responsive:true,displayModeBar:false});
-Plotly.newPlot('risk',[{labels:['Low','Medium','High'],values:[1540,670,290],type:'pie',hole:.48,marker:{colors:['#50c878','#ffc857','#ff6b6b']},textinfo:'label+percent'}],{...layoutBase,title:'Churn-Risk Segmentation'},{responsive:true,displayModeBar:false});
-Plotly.newPlot('channel',[{x:['Online','POS','Contactless'],y:[2820,2180,840],type:'bar',marker:{color:'#50c878'}}],{...layoutBase,title:'Spend by Channel (USD thousands)',yaxis:{...layoutBase.yaxis,title:'$000s'}},{responsive:true,displayModeBar:false});
+const base={paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',font:{color:'#f4f7fb',family:'Inter,Segoe UI,sans-serif'},margin:{t:58,r:20,b:50,l:66},xaxis:{gridcolor:'#213b5b',zerolinecolor:'#213b5b'},yaxis:{gridcolor:'#213b5b',zerolinecolor:'#213b5b'}};
+Plotly.newPlot('monthly',[{x:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],y:[396413,353565,410155,391485,418405,382636,401330,397788,409636,404016,401415,404235],type:'scatter',mode:'lines+markers',line:{width:3,color:'#4ea1ff'},marker:{size:7,color:'#55d6d0'},hovertemplate:'%{x}<br>$%{y:,.0f}<extra></extra>'}],{...base,title:{text:'Monthly Transaction Value',x:.02},yaxis:{...base.yaxis,title:'USD'}},{responsive:true,displayModeBar:false});
+Plotly.newPlot('category',[{x:['Shopping','Travel','Dining','Groceries','Utilities','Healthcare','Fuel','Entertainment'],y:[1226298,931853,608473,565232,510799,340896,312411,275115],type:'bar',marker:{color:'#4ea1ff'},hovertemplate:'%{x}<br>$%{y:,.0f}<extra></extra>'}],{...base,title:{text:'Transaction Value by Category',x:.02},xaxis:{tickangle:-25},yaxis:{...base.yaxis,title:'USD'}},{responsive:true,displayModeBar:false});
+Plotly.newPlot('cards',[{x:['Classic','Silver','Gold','Platinum'],y:[930,1120,374,76],type:'bar',marker:{color:['#7896b7','#55d6d0','#ffc55c','#9b8cff']},hovertemplate:'%{x}<br>%{y:,} customers<extra></extra>'}],{...base,title:{text:'Customers by Card Type',x:.02},yaxis:{...base.yaxis,title:'Customers'}},{responsive:true,displayModeBar:false});
+Plotly.newPlot('risk',[{labels:['Low','Medium','High'],values:[1588,462,450],type:'pie',hole:.55,marker:{colors:['#54d68c','#ffc55c','#ff7b7b']},textinfo:'label+percent',hovertemplate:'%{label}: %{value:,} customers<extra></extra>'}],{...base,title:{text:'Rule-Based Risk Segmentation',x:.02}},{responsive:true,displayModeBar:false});
+Plotly.newPlot('channel',[{x:['Online','POS','Contactless'],y:[2228995,1822524,719559],type:'bar',marker:{color:'#55d6d0'},hovertemplate:'%{x}<br>$%{y:,.0f}<extra></extra>'}],{...base,title:{text:'Transaction Value by Channel',x:.02},yaxis:{...base.yaxis,title:'USD'}},{responsive:true,displayModeBar:false});
 </script>
 </body>
 </html>
